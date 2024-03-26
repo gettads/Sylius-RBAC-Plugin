@@ -1,0 +1,51 @@
+version: "3.4"
+
+services:
+    php:
+        container_name: php-sylius-rbac-dev
+        hostname: php-sylius-plugin-dev
+        image: 'jaroslavtyc/gtt-sylius-plugin-dev-php:8.1'
+        environment:
+            - APP_ENV=test
+            - APP_DEBUG=1
+            - APP_SECRET=${APP_SECRET:-EDITME}
+            - DATABASE_URL=mysql://${MYSQL_USER:-root}:${MYSQL_PASSWORD:-pass_root}@mysql-sylius-rbac-dev:3306/${MYSQL_DATABASE:-sylius_rbac_dev}
+            - MAILER_URL=smtp://mailhog:1025
+            - PHP_DATE_TIMEZONE=${PHP_DATE_TIMEZONE:-UTC}
+        volumes:
+            - .:/srv/sylius:rw,delegated
+
+    nginx-sylius-rbac-dev:
+        container_name: nginx-sylius-rbac-dev
+        image: 'jaroslavtyc/gtt-sylius-plugin-dev-nginx:1.24'
+        ports:
+            # Host port 0 is for "first available"
+            # How to change it:
+            # - set NGINX_HOST_MAPPING_PORT variable in .env file for example
+            # - or extends ports in docker-compose.override.yml
+            # To find out used port use `docker ps` and look for PORTS column to see mapped host port, including IP it can be for example http://0.0.0.0:32771/ which is roughly equivalent to http://127.0.0.1:32771/ for web browser
+            - "${NGINX_HOST_MAPPING_PORT:-0}:80"
+        volumes:
+            - .:/srv/sylius:rw,delegated
+
+    mysql-sylius-rbac-dev:
+        container_name: mysql-sylius-rbac-dev
+        image: mysql:8.0
+        environment:
+            - MYSQL_ROOT_PASSWORD=pass_root
+            - MYSQL_DATABASE=sylius_rbac_dev
+            - MYSQL_USER=sylius
+            - MYSQL_PASSWORD=pass
+        volumes:
+            - mysql-sylius-rbac-dev-data:/var/lib/mysql:rw,delegated
+        ports:
+            # Host port 0 is for "first available"
+            # How to change it:
+            # - set MYSQL_HOST_MAPPING_PORT variable in .env file for example
+            # - or extends ports in docker-compose.override.yml
+            # To find out used port use `docker ps` and look for PORTS column to see mapped host port, including IP it can be for example 0.0.0.0:32772 which is roughly equivalent to 127.0.0.1:32772 for internal network requests
+            - "${MYSQL_HOST_MAPPING_PORT:-0}:3306"
+
+
+volumes:
+    mysql-sylius-rbac-dev-data:

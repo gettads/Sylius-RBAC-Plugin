@@ -1,0 +1,22 @@
+default:
+    suites:
+        rbac_admin:
+            contexts:
+                - sylius.behat.context.hook.doctrine_orm
+
+                - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.currency
+                - sylius.behat.context.setup.payment
+                - sylius.behat.context.setup.product
+                - sylius.behat.context.setup.product_taxon
+                - sylius.behat.context.setup.admin_security
+                - sylius.behat.context.setup.admin_user
+                - sylius.behat.context.setup.shipping
+                - sylius.behat.context.setup.taxonomy
+
+                - sylius.behat.context.transform.taxon
+                - sylius.behat.context.transform.shared_storage
+
+                - sylius.behat.context.ui.admin.rbac
+            filters:
+                tags: "@rbac_admin&&@ui"

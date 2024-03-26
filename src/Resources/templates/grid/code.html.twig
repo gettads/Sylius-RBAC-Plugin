@@ -1,0 +1,10 @@
+<div id="{{ data }}">{{ data }}</div>
+
+{% if (data == 'super_admin') %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            const div = document.getElementById('{{ data }}')
+            div.closest('tr.item').querySelector('td:last-child').innerHTML = '{{ 'gtt_sylius_rbac.form.super_user_admin' | trans }}';
+        });
+    </script>
+{% endif %}

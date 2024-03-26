@@ -1,0 +1,336 @@
+<style>
+    .ui.ribbon.label{position: sticky;position: -webkit-sticky;margin:5px -15px; font-size: 10px;}
+    .ui.header{color: #2185d0;}
+    .tr-header{text-align: center; background: #cbcbcb; text-transform: uppercase; font-weight: bold;cursor: pointer;}
+    .header-toggler-label{text-align:center; background:#eaeaea; font-weight:bold;cursor:pointer; float:right;}
+    .item-toggler-label{text-align:center; background:#eaeaea; font-weight:bold;cursor:pointer; float:right;}
+</style>
+
+{% if(form.vars.data.code == 'super_admin') %}
+    {{ 'gtt_sylius_rbac.form.super_user_admin' | trans }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            document.getElementById('sylius_save_changes_button').remove();
+        });
+    </script>
+{% else %}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.code) }}
+
+    {{ form_row(form.parents) }}
+
+    {% if form.vars.data.isNew or form.vars.data.updatedAt is null %}
+        {% set attrChecked = {'checked': true} %}
+    {% else %}
+        {% set attrChecked = {} %}
+    {% endif %}
+
+    <h4 class="ui header blue">{{ 'gtt_sylius_rbac.categories.admin'|trans|upper }}</h4>
+    <table class="ui celled blue table">
+        <thead>
+            <tr>
+                <th>{{ 'gtt_sylius_rbac.form.permission'|trans }}</th>
+                <th>{{ 'gtt_sylius_rbac.methods.read'|trans }}</th>
+                <th>{{ 'gtt_sylius_rbac.methods.create'|trans }}</th>
+                <th>{{ 'gtt_sylius_rbac.methods.update'|trans }}</th>
+                <th>{{ 'gtt_sylius_rbac.methods.delete'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set prevCategoryName = '' %}
+            {% for name, item in form.vars.choices_data.recognized %}
+                {% set categoryName = name|split(' / ')[0] %}
+                {% if prevCategoryName != categoryName %}
+                    </tbody>
+                    <tbody>
+                    <tr class="tr-header">
+                        <td colspan="5">
+                            {{ categoryName }}
+                            <label class="ui label header-toggler-label">
+                                <span>{{ 'gtt_sylius_rbac.ui.toggle_all'|trans }}</span>
+                                <input type="checkbox" class="ui header-toggler-all">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr class="tr-collapsed" style="display: none">
+                        <td>{{ 'gtt_sylius_rbac.form.permission'|trans }}</td>
+                        <td>{{ 'gtt_sylius_rbac.methods.read'|trans }}</td>
+                        <td>{{ 'gtt_sylius_rbac.methods.create'|trans }}</td>
+                        <td>{{ 'gtt_sylius_rbac.methods.update'|trans }}</td>
+                        <td>{{ 'gtt_sylius_rbac.methods.delete'|trans }}</td>
+                    </tr>
+                    {% set prevCategoryName = categoryName %}
+                {% endif %}
+
+                <tr class="tr-collapsed" style="display: none">
+                    <td data-label="name">
+                        {{ name }}
+                        <label class="ui label item-toggler-label">
+                            <span>{{ 'gtt_sylius_rbac.ui.toggle_all'|trans }}</span>
+                            <input type="checkbox" class="ui item-toggler-all">
+                        </label>
+                    </td>
+                    <td data-label="read">
+                        {% for info in item %}
+                            {% for child in form.children %}
+                                {% if child.vars.label == info.alias and info.human_method == 'read' %}
+                                    <div>
+                                        <span class="ui ribbon label">{{ info.url }}</span>
+                                        {{ form_row(child, {'label': info.human_name}) }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+                    <td data-label="create">
+                        {% for info in item %}
+                            {% for child in form.children %}
+                                {% if child.vars.label == info.alias and info.human_method == 'create' %}
+                                    <span class="ui ribbon label">{{ info.url }}</span>
+                                    {{ form_row(child, {'label': info.human_name}) }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+                    <td data-label="update">
+                        {% for info in item %}
+                            {% for child in form.children %}
+                                {% if child.vars.label == info.alias and info.human_method == 'update' %}
+                                    <span class="ui ribbon label">{{ info.url }}</span>
+                                    {{ form_row(child, {'label': info.human_name}) }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+                    <td data-label="delete">
+                        {% for info in item %}
+                            {% for child in form.children %}
+                                {% if child.vars.label == info.alias and info.human_method == 'delete' %}
+                                    <span class="ui ribbon label">{{ info.url }}</span>
+                                    {{ form_row(child, {'label': info.human_name}) }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+    <h4 class="ui header blue">{{ 'gtt_sylius_rbac.categories.uncategorized'|trans|upper }}</h4>
+    <table class="ui celled blue table">
+        <thead>
+        <tr>
+            <th>{{ 'gtt_sylius_rbac.form.permission'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.read'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.create'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.update'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.delete'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr class="tr-header">
+                <td colspan="5">
+                    {{ 'gtt_sylius_rbac.categories.additional'|trans|upper }}
+                    <label class="ui label header-toggler-label">
+                        <span>{{ 'gtt_sylius_rbac.ui.toggle_all'|trans }}</span>
+                        <input type="checkbox" class="ui header-toggler-all">
+                    </label>
+                </td>
+            </tr>
+            {% for item in form.vars.choices_data.unrecognized %}
+                <tr class="tr-collapsed" style="display: none">
+                <td data-label="name">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias%}
+                                <div>
+                                    {{ info.human_name }}
+                                    <label class="ui label item-toggler-label">
+                                        <span>{{ 'gtt_sylius_rbac.ui.toggle_all'|trans }}</span>
+                                        <input type="checkbox" class="ui item-toggler-all">
+                                    </label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="read">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'read' %}
+                                <div>
+                                    <span class="ui ribbon label">{{ info.url }}</span>
+                                    {{ form_row(child, {'label': info.human_name} | merge(attrChecked)) }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="create">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'create' %}
+                                <span class="ui ribbon label">{{ info.url }}</span>
+                                {{ form_row(child, {'label': info.human_name} | merge(attrChecked)) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="update">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'update' %}
+                                <span class="ui ribbon label">{{ info.url }}</span>
+                                {{ form_row(child, {'label': info.human_name} | merge(attrChecked)) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="delete">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'delete' %}
+                                <span class="ui ribbon label">{{ info.url }}</span>
+                                {{ form_row(child, {'label': info.human_name} | merge(attrChecked)) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+    <h4 class="ui header blue">{{ 'gtt_sylius_rbac.categories.api'|trans|upper }}</h4>
+    <table class="ui celled blue table">
+        <thead>
+        <tr>
+            <th>{{ 'gtt_sylius_rbac.form.permission'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.read'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.create'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.update'|trans }}</th>
+            <th>{{ 'gtt_sylius_rbac.methods.delete'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="tr-header">
+            <td colspan="5">
+                {{ 'gtt_sylius_rbac.categories.api'|trans|upper }}
+                <label class="ui label header-toggler-label">
+                    <span>{{ 'gtt_sylius_rbac.ui.toggle_all'|trans }}</span>
+                    <input type="checkbox" class="ui header-toggler-all">
+                </label>
+            </td>
+        </tr>
+        {% for item in form.vars.choices_data.api %}
+            <tr class="tr-collapsed" style="display: none">
+                <td data-label="name">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias%}
+                                <div>
+                                    {{ info.human_name }}
+                                    <label class="ui label item-toggler-label">
+                                        <span>{{ 'gtt_sylius_rbac.ui.toggle_all'|trans }}</span>
+                                        <input type="checkbox" class="ui item-toggler-all">
+                                    </label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="read">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'read' %}
+                                <div>
+                                    <span class="ui ribbon label">{{ info.url }}</span>
+                                    {{ form_row(child, {'label': info.human_name}) }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="create">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'create' %}
+                                <span class="ui ribbon label">{{ info.url }}</span>
+                                {{ form_row(child, {'label': info.human_name}) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="update">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'update' %}
+                                <span class="ui ribbon label">{{ info.url }}</span>
+                                {{ form_row(child, {'label': info.human_name}) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+                <td data-label="delete">
+                    {% for info in item %}
+                        {% for child in form.children %}
+                            {% if child.vars.label == info.alias and info.human_method == 'delete' %}
+                                <span class="ui ribbon label">{{ info.url }}</span>
+                                {{ form_row(child, {'label': info.human_name}) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        $('.tr-header').click(function () {
+            if ($(this).hasClass('fade-in')) {
+                $(this).siblings('.tr-collapsed').fadeOut();
+            }
+            if (!$(this).hasClass('fade-in')) {
+                $(this).siblings('.tr-collapsed').fadeIn();
+            }
+            $(this).toggleClass('fade-in');
+        });
+
+        $('.header-toggler-label').click(function (event) {
+            event.stopPropagation();
+        });
+
+        $('.header-toggler-all').change(function (event) {
+            if ($(this).is(':checked')) {
+                $(this).closest('tbody').find('input[type=checkbox]').each(function (index, element) {
+                    $(element).prop('checked', true);
+                });
+            } else {
+                $(this).closest('tbody').find('input[type=checkbox]').each(function (index, element) {
+                    $(element).prop('checked', false);
+                });
+            }
+        });
+        $('.item-toggler-all').change(function (event) {
+            if ($(this).is(':checked')) {
+                $(this).closest('tr').find('input[type=checkbox]').each(function (index, element) {
+                    $(element).prop('checked', true);
+                });
+            } else {
+                $(this).closest('tr').find('input[type=checkbox]').each(function (index, element) {
+                    $(element).prop('checked', false);
+                });
+            }
+        });
+    });
+</script>

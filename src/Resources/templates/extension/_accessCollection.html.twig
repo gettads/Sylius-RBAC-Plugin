@@ -1,0 +1,39 @@
+<div class="ui segment">
+    <h4 class="ui dividing header">{{ 'gtt_sylius_rbac.ui.menu.access_groups' | trans }}</h4>
+    <div class="ui two column stackable grid field" >
+        <div class="four wide column">
+                <span class="before-columns-label">
+                    <a class="ui blue basic button"
+                       href="{{ path('gtt_sylius_rbac_admin_access_groups_index') }}">
+                        {{ 'gtt_sylius_rbac.form.code_hint'|trans }}
+                    </a>
+                    <span style="text-align:center;display:inline-block;width:33%;">{{ 'gtt_sylius_rbac.form.role' | trans }}:</span>
+                </span>
+        </div>
+        <div class="twelve wide column">
+            {{ form_widget(form.accessCollection, {'attr': {'class': 'ui fluid search dropdown'}}) }}
+            {{ form_errors(form.accessCollection) }}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+        $.fn.dropdown.settings.onNoResults = function(value, text, choice){
+            $(this).find('option').each((index, element) => {
+                if ((new RegExp(value, 'gi')).test($(element).text())) {
+                    const menuContainer = $(this).find('.menu');
+                    menuContainer.addClass('visible').css('display', 'block');
+                    menuContainer.find('.item').each((i, item) => {
+                        if ($(item).text() === $(element).text()) {
+                            $(item).removeClass('filtered');
+                        }
+                    });
+                }
+            });
+        };
+
+        $('.ui.dropdown').dropdown();
+    });
+</script>

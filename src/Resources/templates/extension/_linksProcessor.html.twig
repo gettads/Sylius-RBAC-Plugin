@@ -1,0 +1,16 @@
+<style>
+    a[href*="/no-content"],
+    form[action*="/no-content"],
+    *[data-stats-url*="/no-content"]
+
+    {display:none}
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        $(
+            ' a[href*="/no-content"] ' +
+            ',  form[action*="/no-content"] ' +
+            ', *[data-stats-url*="/no-content"] '
+        ).remove();
+    });
+</script>

@@ -1,0 +1,19 @@
+gtt_sylius_rbac_admin:
+    resource: |
+        alias: gtt_sylius_rbac.access_groups
+        except: ['show']
+        section: admin
+        templates: '@SyliusAdmin\\Crud'
+        redirect: update
+        vars:
+            all:
+                subheader: gtt_sylius_rbac.ui.crud_rbac
+                templates:
+                    form: '@GttSyliusRbacPlugin/form/rbac_main.html.twig'
+        grid: gtt_sylius_rbac
+    type: sylius.resource
+    prefix: '/%sylius_admin.path_name%' # /admin
+
+gtt_sylius_rbac_admin_no_content:
+    path: /admin/no-content
+    controller: Gtt\SyliusRbacPlugin\Controller\EmptyPageController::index

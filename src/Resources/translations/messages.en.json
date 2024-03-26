@@ -1,0 +1,52 @@
+{
+  "gtt_sylius_rbac": {
+    "front": {},
+    "ui": {
+      "new_access_groups": "New access group",
+      "access_groups": "Access groups",
+      "crud_rbac": "RBAC management",
+      "edit_access_groups": "Edit access group",
+      "new_rbac": "New access group",
+      "toggle_all": "Toggle all",
+      "menu": {
+        "access_groups": "Access groups"
+      }
+    },
+    "form": {
+      "code": "Code",
+      "role": "Role",
+      "code_hint": "Roles management",
+      "parent": "Parent role",
+      "parents": "Parent roles",
+      "permissions": "Permissions",
+      "permission": "Permission",
+      "super_user_admin": "Super-admin is immutable role: it has full access."
+    },
+    "routes": {
+      "promotion_coupon": "Promotion coupon",
+      "product_variant": "Product variant",
+      "order": "Order",
+      "order_operations": "Other operations",
+      "product_review_operations": "Product review operations",
+      "login_logout": "Login & Logout",
+      "shipping_operations": "Other operations with shipping"
+    },
+    "methods": {
+      "get": "Read",
+      "post": "Create",
+      "patch": "Update",
+      "put": "Update",
+      "delete": "Delete",
+      "read": "Read",
+      "create": "Create",
+      "update": "Update",
+      "other": "Other"
+    },
+    "categories": {
+      "admin": "Access for admin categories",
+      "uncategorized": "Access for additional admin routes (AJAX, partial render, etc.)",
+      "additional": "Additional routes",
+      "api": "API access"
+    }
+  }
+}

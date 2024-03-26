@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<services>
+		<defaults public="true"/>
+
+        <service id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleIndexPageInterface"
+                 class="\Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleIndexPage"
+                 public="true">
+            <argument type="service" id="behat.mink.default_session"/>
+            <argument type="service" id="behat.mink.parameters"/>
+            <argument type="service" id="router.default"/>
+            <argument type="service" id="sylius.behat.table_accessor"/>
+            <argument>gtt_sylius_rbac_admin_access_groups_index</argument>
+        </service>
+
+        <service id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleCreatingPageInterface"
+                 class="\Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleCreatingPage"
+                 public="true">
+            <argument type="service" id="behat.mink.default_session"/>
+            <argument type="service" id="behat.mink.parameters"/>
+            <argument type="service" id="router.default"/>
+            <argument>gtt_sylius_rbac_admin_access_groups_create</argument>
+        </service>
+
+        <service id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleUpdatingPageInterface"
+                 class="\Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleUpdatingPage"
+                 public="true">
+            <argument type="service" id="behat.mink.default_session"/>
+            <argument type="service" id="behat.mink.parameters"/>
+            <argument type="service" id="router.default"/>
+            <argument>gtt_sylius_rbac_admin_access_groups_update</argument>
+        </service>
+
+        <service id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleDeletingPageInterface"
+                 class="\Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleDeletingPage"
+                 public="true">
+            <argument type="service" id="behat.mink.default_session"/>
+            <argument type="service" id="behat.mink.parameters"/>
+            <argument type="service" id="router.default"/>
+            <argument>gtt_sylius_rbac_admin_access_groups_delete</argument>
+        </service>
+
+		<service
+              id="sylius.behat.context.ui.admin.rbac"
+              class="Tests\Gtt\SyliusRbacPlugin\Behat\Context\Ui\Admin\RbacContext"
+              autowire="true"
+        >
+            <argument key="$sharedStorage" type="service" id="sylius.behat.shared_storage" />
+            <argument key="$indexPage" type="service" id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleIndexPageInterface" />
+            <argument key="$createPage" type="service" id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleCreatingPageInterface" />
+            <argument key="$updatePage" type="service" id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleUpdatingPageInterface" />
+            <argument key="$deletePage" type="service" id="Tests\Gtt\SyliusRbacPlugin\Behat\Pages\Admin\RoleDeletingPageInterface" />
+		</service>
+
+	</services>
+</container>
